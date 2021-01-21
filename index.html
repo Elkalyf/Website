@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Display Webcam Stream</title>
+  <link rel="stylesheet" href="style.css">
+  <script language="javascript" type="text/javascript" src="script.js"></script>
+  <link rel="icon" type="src/image/png" href="favicon.ico">
+</head>
+
+<body>
+  
+  <div class="flex" onmousemove="myFunction(event)" onmouseout="clearCoor()">
+  <img id="headline" src="src/Chako.png" width=600px height= 300px>
+  </div>
+
+  <p id="demo"></p>
+<div id="buttons">
+ 
+<button onclick="toggle()">
+  Start Webcam
+
+</button>
+
+<button onclick="stop()">
+  stop
+
+</button>
+
+<button onclick="location.href='https://kimcartoon.to/'" type="button">
+  Video Section</button>
+
+  
+<button typ="button" id="startBtn" onclick="initialize()">Start</button>
+
+<ul>
+ <li> <form id="form">
+    <input id="contrastid" type="number" value="1" class="wheelable" step="0.1" onchange="contrast()">
+  
+<button  onclick="contrast()"> Contrast </button>
+</form>
+</li>
+<li>
+  <form id="form">
+    <input id="brightid" type="number" value="1" step="0.01" onchange="bright()">
+   
+<button onclick="bright()"> Bright </button>
+</form>
+</li>
+<li>
+  <form id="form">
+    <input id="saturationid" type="number" value="1" step="0.1" onchange="saturation()">
+   
+<button onclick="saturation()"> Saturation </button>
+</form>
+</li>
+<li>
+  <form id="form">
+    <input id="grayscaleid" type="number" value="0" step="0.01" >
+   
+  <button onclick="grayscale()"> Grayscale</button>
+</form>
+</li>
+
+<li>
+  <form id="form">
+    <input id="huerotateid" type="number" value="1" onchange="huerotate()" >
+
+
+<button onclick="huerotate()">Grade-Rotate</button>
+</form>
+</li>
+
+<li>
+  <form id="form">
+    <input id="invertid" type="number" min=0 max=100 onchange="invert()" >
+ 
+
+<button onclick="invert()">Invert</button>
+</form>
+</li>
+</ul>
+
+</div>
+
+
+
+<div id="container">
+
+  <video autoplay="false" id="videoElement">
+
+  </video>
+ 
+ 
+  
+</div>
+
+
+<div id="text">
+  <p>
+    Dalai Lama
+  Der Dalai Lama wurde 1989 mit dem Friedensnobelpreis ausgezeichnet. Er setzt sich für einen friedlichen Dialog der Menschen ein. Dazu hat er eine große Zahl von Vortragsreisen rund um den Globus durchgeführt und viele Bücher geschrieben. Er hat den Buddhismus zu einer modernen westlichen Glücksphilosophie gewandelt.(Wikipedia: Glück)
+  
+  Einer seiner wichtigsten westlichen Schüler ist Matthieu Ricard, der sich von Gehirnforschern untersuchen ließ und seitdem scherzhaft als der glücklichste Mensch der Welt gilt. Über seinen Weg der Erleuchtung schrieb er: Ich kann wirklich von mir sagen, dass ich ein glücklicher Mensch bin. (...) Das intensive Gefühl des inneren Wohlbefindens, das ich heute in jedem Moment meines Lebens verspüre, entstand erst im Lauf der Zeit. (...) Wirklich unverzichtbar war für mich, meinen spirituellen Meistern zu begegnen und ihre Unterweisungen zu erhalten. (Matthieu Ricard: Glück, Seite 371 f.)
+  </p>
+
+  
+</div>
+  <input id="edValue" type="text" onInput="edValueKeyPress()" onclick="play()"><br>
+  <span id="lblValue">The text box contains: </span>
+  <audio id="audio" src="http://www.soundjay.com/button/beep-07.wav" autoplay="false" ></audio>
+   
+
+
+
+
+<canvas id="gc" width="400" height="400"></canvas>
+
+
+<script>
+
+
+
+
+
+
+let root = document.documentElement;
+
+
+
+
+
+function contrast(){
+var color = document.getElementById("contrastid").value;
+
+
+
+root.addEventListener("mousemove", e => {
+  root.style.setProperty('--color', color);
+
+});
+
+
+}
+
+function bright(){
+var bright = document.getElementById("brightid").value;
+
+
+root.addEventListener("mousemove", e => {
+  root.style.setProperty('--bright', bright);
+
+});
+
+}
+
+
+function saturation(){
+var sat = document.getElementById("saturationid").value;
+
+
+
+root.addEventListener("mousemove", e => {
+  root.style.setProperty('--sat', sat);
+
+});
+
+console.log('Saturation: ' + sat);
+}
+
+function grayscale(){
+var gray = document.getElementById("grayscaleid").value;
+
+
+
+root.addEventListener("mousemove", e => {
+  root.style.setProperty('--gray', gray);
+
+});
+
+}
+
+function huerotate(){
+var rotate = document.getElementById("huerotateid").value;
+
+
+
+root.addEventListener("mousemove", e => {
+  root.style.setProperty('--rotate', rotate+"deg");
+
+});
+
+console.log('Rotate: ' + rotate+"deg");
+}
+
+
+function invert(){
+var invert = document.getElementById("invertid").value;
+
+
+
+root.addEventListener("mousemove", e => {
+  root.style.setProperty('--invert', invert+"%");
+
+});
+
+console.log('Invert: ' + invert+"%");
+}
+
+
+
+let testBool = true;
+
+
+var video = document.querySelector("#videoElement");
+
+
+function toggle() {
+
+if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+
+    .then(function (stream) {
+      video.srcObject = stream;
+    })
+
+    .catch(function (err0r) {
+      console.log("Something went wrong!");
+    });}
+
+  }
+
+
+function stop(e) {
+  var stream = video.srcObject;
+  var tracks = stream.getTracks();
+
+  for (var i = 0; i < tracks.length; i++) {
+    var track = tracks[i];
+    track.stop();
+  }
+
+  video.srcObject = null;
+}
+let x = 9
+
+while (x < 9 && x > 0) {
+    x--
+    console.log('x in while-schleife: ' + x)
+}
+console.log('x nach while-schleife: ' + x)
+
+
+
+  
+
+
+
+function myFunction(e) {
+  var x = e.clientX;
+  var y = e.clientY;
+ while(x>=255){
+   x=x-255;
+ }
+
+
+  root.addEventListener("mousemove", e => {
+  root.style.setProperty('--changeColorRed', x);
+
+});
+
+
+
+
+
+}
+
+
+
+function edValueKeyPress() {
+    var edValue = document.getElementById("edValue");
+    var s = edValue.value;
+
+    var lblValue = document.getElementById("lblValue");
+    lblValue.innerText = "The text box contains: " + s;
+}
+
+function play(){
+ 
+
+var sound = document.getElementById("audio");
+      sound.play();
+}
+
+
+var startBtn= document.getElementById('startBtn');
+var startGm= document.getElementById('gc');
+
+
+startGm.style.display="none";
+
+
+
+function initialize(){
+
+  
+     var elem = document.getElementById('startBtn').innerHTML;
+     console.log(elem);
+     if (elem=="Start"){
+     document.getElementById('startBtn').innerHTML="Stop";
+
+     startGm.style.display="inline";
+     document.addEventListener("keydown",keyPush);}
+    else {
+        document.getElementById('startBtn').innerHTML="Start";
+ 
+        document.removeEventListener("keydown",keyPush);
+       
+        setInterval(null);
+
+px=py=10;
+gs=tc=20;
+ax=ay=15;
+xv=yv=0;
+trail=[];
+tail = 5;
+startGm.style.display="none";
+    }
+
+
+
+}
+
+    window.onload=function() {
+        canv=document.getElementById("gc");
+        ctx=canv.getContext("2d");
+        
+        setInterval(game,1000/15);
+        ctx.fillStyle="black";
+    ctx.fillRect(0,0,canv.width,canv.height);
+    }
+
+px=py=10;
+gs=tc=20;
+ax=ay=15;
+xv=yv=0;
+trail=[];
+tail = 5;
+    function game() {
+        px+=xv;
+        py+=yv;
+        if(px<0) {
+            px= tc-1;
+        }
+        if(px>tc-1) {
+            px=0;
+        }
+        if(py<0) {
+            py= tc-1;
+        }
+        if(py>tc-1) {
+            py=0;
+        }
+    ctx.fillStyle="black";
+    ctx.fillRect(0,0,canv.width,canv.height);
+
+    ctx.fillStyle="lime";
+    for(var i=0;i<trail.length;i++) {
+        ctx.fillRect(trail[i].x*gs,trail[i].y*gs,gs-2,gs-2);
+        if(trail[i].x==px && trail[i].y==py) {
+            tail = 5;
+        }
+    }
+    trail.push({x:px,y:py});
+    while(trail.length>tail){
+    trail.shift();
+    }
+
+    if(ax==px && ay==py) {
+    tail++;
+    ax=Math.floor(Math.random()*tc);
+    ay=Math.floor(Math.random()*tc);
+    }
+    ctx.fillStyle="red";
+    ctx.fillRect(ax*gs,ay*gs,gs-2,gs-2);
+}
+function keyPush(evt) {
+    switch(evt.keyCode) {
+        case 37:
+            xv=-1;yv=0;
+            break;
+        case 38:
+            xv=0;yv=-1;
+            break;
+        case 39:
+            xv=1;yv=0;
+            break;
+        case 40:
+            xv=0; yv=1;
+            break;
+     }
+}
+
+
+ </script>
+
+</body>
+
+</html>

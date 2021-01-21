@@ -1,0 +1,116 @@
+:root {
+    /* :root is a clever way of saying "the outer-most element" */
+  
+      --color: 1; /* the default */
+      --bright: 1;
+      --gray: 0;
+      --sat: 1;
+      --rotate:1deg;
+      --invert: 0%;
+
+      --changeColorRed: 255;
+  }
+  html {
+    text-align: center;
+    background-color:gray;
+  }
+  h1{
+
+      width: 100%;
+      text-align: center;
+      display: block;
+
+    }
+
+
+  .flex { 
+
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+  background-color: rgba(var(--changeColorRed), 0, 0, 1);;
+
+  }
+
+  
+  
+  #container{
+
+  width: 100%;
+  text-align: center;
+
+  /**	-webkit-transform: rotate(90deg);
+       -moz-transform: rotate(90deg);
+       -o-transform: rotate(90deg);
+       -ms-transform: rotate(90deg);
+       transform: rotate(90deg);
+  */
+  
+  }
+  
+  #text{
+  
+    display: block;
+  
+  }
+
+  
+
+  ul li {
+
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    float: left;
+
+}
+
+
+#buttons{
+
+  height: 100%;
+  width: 100%;
+  display: block;
+  margin-bottom: 5%;
+  
+}
+
+ 
+  input{
+
+    width:20%;
+
+  }
+  
+  
+  #videoElement {
+  
+   
+      height: 50%;
+      margin:0 auto;
+      display: inline-block;
+       background-color: #383;
+      -webkit-filter: brightness(1.0) grayscale(0) saturate(1), contrast(1) hue-rotate(1deg) invert(0%) ;
+      filter:invert(var(--invert)) brightness(var(--bright)) grayscale(var(--gray)) saturate(var(--sat)) contrast(var(--color)) hue-rotate(var(--rotate));
+
+ 	 /** -webkit-transform: rotate-(-90deg);
+       -moz-transform: rotate(-90deg);
+       -o-transform: rotate(-90deg);
+       -ms-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+       
+  */
+  }
+
+
+
+canvas{
+  
+    margin: 5%;
+    justify-content: center; 
+    align-items: center;
+    display: flex; 
+}
+
+  
